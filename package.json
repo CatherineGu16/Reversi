@@ -1,0 +1,30 @@
+{
+  "name": "reversi",
+  "version": "0.0.1",
+  "description": "This is a web version of the game Reversi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CatherineGu16/Reversi.git"
+  },
+  "keywords": [
+    "reversi",
+    "CatherineGu16",
+    "hci",
+    "technology",
+    "game"
+  ],
+  "author": "Catherine Gu (@CatherineGu16)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/CatherineGu16/Reversi/issues"
+  },
+  "homepage": "https://github.com/CatherineGu16/Reversi#readme",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "socket.io": "^4.7.5"
+  }
+}
