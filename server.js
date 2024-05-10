@@ -19,9 +19,9 @@ if ((typeof port == 'undefined') || (port === null)) {
 let file = new static.Server(directory);
 
 let app = http.createServer(
-    function (request, response) {
+    function(request, response) {
         request.addListener('end',
-            function () {
+            function() {
                 file.serve(request, response);
             }
         ).resume();
