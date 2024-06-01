@@ -261,6 +261,7 @@ let old_board = [
         ['?','?','?','?','?','?','?','?'],
         ['?','?','?','?','?','?','?','?'],
     ];
+    let my_color = "";
 
 socket.on('game_update', (payload) => {
     if ((typeof payload == 'undefined') || (payload === null)) {
@@ -279,6 +280,18 @@ socket.on('game_update', (payload) => {
     }
 
     /* Update my color */
+    if (socket.id === payload.game.player_white.socket) {
+        my_color = 'white';
+    }
+    else if (socket.id === payload.game.player_black.socket) {
+        my_color = 'black';
+    }
+    else {
+        window.location.href='lobby.html?username='+username;
+        return;
+    }
+
+    $("#my_color").html('<h3 id="my_color">I am '+my_color+'</h3>');
 
 
     /* Animate changes to the board */
@@ -330,7 +343,12 @@ socket.on('game_update', (payload) => {
                 }
 
                 const t = Date.now();
-                $('#'+row+'_'+column).html('<img class="img-fluid" src="assets/images/'+graphic+'?time='+t+'" alt="'+altTag+'" />');
+                $('#' + row + '_' + column).html('<img class="img-fluid" src="assets/images/'+graphic+'?time='+t+'" alt="'+altTag+'" />');
+                
+                $('#' + row + '_' + column).off('click');
+                if (board[row][column] === ' ') {
+                    $('#' + row + '_' + column).addClass('hovered_over');
+                }
                 
             }
         }
