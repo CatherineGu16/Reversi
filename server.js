@@ -452,6 +452,7 @@ io.on('connection', (socket) => {
         serverLog('send_chat_message command succeeded', JSON.stringify(response));
 
     });
+
     socket.on('play_token', (payload) => {
         serverLog('Server received a command', '\'play_token\'', JSON.stringify(payload));
         /* Check that the data coming from the client is good */
@@ -537,6 +538,7 @@ io.on('connection', (socket) => {
             result: 'success'
         }
         socket.emit('play_token_response', response);
+
         /* Execute the move */
         if (color === 'white') {
             game.board[row][column] = 'w';
@@ -661,6 +663,31 @@ function send_game_update(socket, game_id, message) {
     })
 
     /* Check if the game is over */
+    let count = 0;
+    for(let row = 0; row < 8; row++) {
+        for(let column = 0; column < 8; column++){
+            if(games[game_id].board[row][column] != ' ' ) {
+                count++;
+            }
+        }
+    }
+    if(count === 64) {
+        let payload = {
+            result: 'success',
+            game_id: game_id,
+            game: games[game_id],
+            who_won: 'everyone'
+        }
+        io.in(game_id).emit('game_over', payload);
+
+        /* Delete old games after one hour */
+        setTimeout(
+            ((id) => {
+                return(() => {
+                    delete games[id];
+                });
+            })(game_id), 60*60*1000);
+    }
 }
 
 
