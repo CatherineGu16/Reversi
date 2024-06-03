@@ -534,6 +534,31 @@ io.on('connection', (socket) => {
             return;
         }
 
+        /* Make sure the current attempt is by the correct color */
+        if (color !== game.whose_turn) {
+            let response = {
+                result: 'fail',
+                message: 'play_token played the wrong color. It\'s not their turn'
+            }
+            socket.emit('play_token_response', response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        /* Make sure the current play is coming from the expected player */
+        if (
+            ((game.whose_turn === 'white') && (game.player_white.socket != socket.id)) ||
+            ((game.whose_turn === 'black') && (game.player_black.socket != socket.id))
+        ) {
+            let response = {
+                result: 'fail',
+                message: 'play_token played the right color but by the wrong player'
+            }
+            socket.emit('play_token_response', response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
         let response = {
             result: 'success'
         }
@@ -573,7 +598,7 @@ function create_new_game() {
     var d = new Date();
     new_game.last_move_time = d.getTime();
 
-    new_game.whose_turn = 'white';
+    new_game.whose_turn = 'black';
 
     new_game.board = [
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -585,15 +610,13 @@ function create_new_game() {
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     ];
+
+    
+
     return new_game;
 }
 
 function send_game_update(socket, game_id, message) {
-    // check to see if game with game_id exists
-    // make sure that only two people are in the room
-    // assign this socket a color
-    // send the game update
-    // check if the game is over
 
     // check to see if game with game_id exists
     if ((typeof games[game_id] == 'undefined') || (games[game_id] === null)) {
@@ -661,13 +684,12 @@ function send_game_update(socket, game_id, message) {
         io.of('/').to(game_id).emit('game_update', payload);
     })
 
-    // check if game over
+    /* Check if game over */
     let count = 0;
     for (let row = 0; row < 8; row++) {
         for (let column = 0; column < 8; column++) {
             if (games[game_id].board[row][column] != ' ') {
                 count++;
-                console.log('Current count:' + count);
             }
         }
     }
@@ -681,7 +703,7 @@ function send_game_update(socket, game_id, message) {
         }
         io.in(game_id).emit('game_over', payload);
 
-        /**Delete old games after one hour */
+        /* Delete old games after one hour */
         setTimeout(
             ((id) => {
                 return (() => {
