@@ -589,89 +589,90 @@ function create_new_game() {
 }
 
 function send_game_update(socket, game_id, message) {
+    // check to see if game with game_id exists
+    // make sure that only two people are in the room
+    // assign this socket a color
+    // send the game update
+    // check if the game is over
 
-    /* Check to see if a game with game_id exists */
-    if ((typeof games[game_id] == 'undefined') || (games[game_id]) === null) {
-        console.log("No game exists with game_id: " + game_id + ". Making a new game" + socket.id);
+    // check to see if game with game_id exists
+    if ((typeof games[game_id] == 'undefined') || (games[game_id] === null)) {
+        console.log("No game exist with game_id: " + game_id + ". Making a new game for " + socket.id);
         games[game_id] = create_new_game();
     }
 
-    /* Make sure that only 2 ppl are in the room */
-    /* Assign this socket a color */
+    // make sure that only two people are in the room
+    // assign this socket a color
     io.of('/').to(game_id).allSockets().then((sockets) => {
-        const iterator = sockets[Symbol.iterator]();
-        if(sockets.size >= 1) {
-            let first = iterator.next().value;
 
-            if ((games[game_id].player_white.socket != first) && 
-            (games[game_id].player_black.socket != first)) {
-                /* Player does not have a color yet */
-                if (games[game_id].player_white.socket === "") {
-                    /* This player should be white */
-                    console.log("White is assigned to: " + first);
+        const iterator = sockets[Symbol.iterator]();
+        if (sockets.size >= 1) {
+            let first = iterator.next().value;
+            if ((games[game_id].player_white.socket != first) && (games[game_id].player_black.socket != first)) {
+                // player does not have a color
+                if ((games[game_id].player_white.socket === "")) {
+                    // this player should be white
+                    console.log("White is assigned to " + first);
                     games[game_id].player_white.socket = first;
                     games[game_id].player_white.username = players[first].username;
-                }
-                else if (games[game_id].player_black.socket === "") {
-                    /* This player should be black */
-                    console.log("Black is assigned to: " + first);
+                } else if ((games[game_id].player_black.socket === "")) {
+                    // this player should be white
+                    console.log("Black is assigned to " + first);
                     games[game_id].player_black.socket = first;
                     games[game_id].player_black.username = players[first].username;
-                }
-                else {
-                    /* This player should be kicked out */
-                    console.log("Kicking "+ first + " out of game: " + game_id);
+                } else {
+                    // this player should be kicked out
+                    console.log("Kicking " + first + "out of game: " + game_id);
                     io.in(first).socketsLeave([game_id]);
                 }
             }
         }
 
-        if(sockets.size >= 2) {
+        if (sockets.size >= 2) {
             let second = iterator.next().value;
-
-            if ((games[game_id].player_white.socket != second) && 
-            (games[game_id].player_black.socket != second)) {
-                /* Player does not have a color yet */
-                if (games[game_id].player_white.socket === "") {
-                    /* This player should be white */
-                    console.log("White is assigned to: " + second);
+            if ((games[game_id].player_white.socket != second) && (games[game_id].player_black.socket != second)) {
+                // player does not have a color
+                if ((games[game_id].player_white.socket === "")) {
+                    // this player should be white
+                    console.log("White is assigned to " + second);
                     games[game_id].player_white.socket = second;
                     games[game_id].player_white.username = players[second].username;
-                }
-                else if (games[game_id].player_black.socket === "") {
-                    /* This player should be black */
-                    console.log("Black is assigned to: " + second);
+                } else if ((games[game_id].player_black.socket === "")) {
+                    // this player should be white
+                    console.log("Black is assigned to " + second);
                     games[game_id].player_black.socket = second;
                     games[game_id].player_black.username = players[second].username;
-                }
-                else {
-                    /* This player should be kicked out */
-                    console.log("Kicking "+ second + " out of game: " + game_id);
+                } else {
+                    // this player should be kicked out
+                    console.log("Kicking " + second + "out of game: " + game_id);
                     io.in(second).socketsLeave([game_id]);
                 }
             }
         }
 
-        /* Send game update */
+        // send game update
         let payload = {
             result: 'success',
             game_id: game_id,
             game: games[game_id],
             message: message
         }
-        io.of("/").to(game_id).emit('game_update', payload);
+
+        io.of('/').to(game_id).emit('game_update', payload);
     })
 
-    /* Check if the game is over */
+    // check if game over
     let count = 0;
-    for(let row = 0; row < 8; row++) {
-        for(let column = 0; column < 8; column++){
-            if(games[game_id].board[row][column] != ' ' ) {
+    for (let row = 0; row < 8; row++) {
+        for (let column = 0; column < 8; column++) {
+            if (games[game_id].board[row][column] != ' ') {
                 count++;
+                console.log('Current count:' + count);
             }
         }
     }
-    if(count === 64) {
+
+    if ((count === 64) || (count > 63)) {
         let payload = {
             result: 'success',
             game_id: game_id,
@@ -680,13 +681,15 @@ function send_game_update(socket, game_id, message) {
         }
         io.in(game_id).emit('game_over', payload);
 
-        /* Delete old games after one hour */
+        /**Delete old games after one hour */
         setTimeout(
             ((id) => {
-                return(() => {
+                return (() => {
                     delete games[id];
                 });
-            })(game_id), 60*60*1000);
+            })(game_id), 60 * 60 * 1000
+
+        );
     }
 }
 
