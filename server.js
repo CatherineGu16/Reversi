@@ -622,12 +622,15 @@ function check_line_match(color, dr, dc, r, c, board) {
     if (board[r][c] === color) {
         return true;
     }
-
-    /* Check to make sure we aren't going to walk off the board */
-    if (r + dr < 0 || (r + dr > 7)) {
+    if (board[r][c] === ' ') {
         return false;
     }
-    else if (c + dc < 0 || (c + dc > 7)) {
+
+    /* Check to make sure we aren't going to walk off the board */
+    if ((r + dr < 0) || (r + dr > 7)) {
+        return false;
+    }
+    else if ((c + dc < 0) || (c + dc > 7)) {
         return false;
     }
     return(check_line_match(color, dr, dc, r+dr, c+dc, board));
@@ -648,10 +651,10 @@ function adjacent_support(who, dr, dc, r, c, board) {
     }
 
     /* Check to make sure that the adjacent support is on the board */
-    if (r + dr < 0 || (r + dr > 7)) {
+    if ((r + dr < 0) || (r + dr > 7)) {
         return false;
     }
-    else if (c + dc < 0 || (c + dc > 7)) {
+    else if ((c + dc < 0 )|| (c + dc > 7)) {
         return false;
     }
 
@@ -661,10 +664,10 @@ function adjacent_support(who, dr, dc, r, c, board) {
     }
 
     /* Check to make sure there is space for a matching color to capture tokens */
-    if (r + dr + dr < 0 || (r + dr + dr > 7)) {
+    if ((r + dr + dr < 0) || (r + dr + dr > 7)) {
         return false;
     }
-    else if (c + dc + dc < 0 || (c + dc + dc > 7)) {
+    else if ((c + dc + dc < 0) || (c + dc + dc > 7)) {
         return false;
     }
 
