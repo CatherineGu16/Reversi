@@ -656,7 +656,7 @@ function adjacent_support(who, dr, dc, r, c, board) {
     if ((r + dr < 0) || (r + dr > 7)) {
         return false;
     }
-    else if ((c + dc < 0 )|| (c + dc > 7)) {
+    if ((c + dc < 0 )|| (c + dc > 7)) {
         return false;
     }
 
@@ -669,7 +669,7 @@ function adjacent_support(who, dr, dc, r, c, board) {
     if ((r + dr + dr < 0) || (r + dr + dr > 7)) {
         return false;
     }
-    else if ((c + dc + dc < 0) || (c + dc + dc > 7)) {
+    if ((c + dc + dc < 0) || (c + dc + dc > 7)) {
         return false;
     }
 
