@@ -729,7 +729,7 @@ function flip_line(who, dr, dc, r, c, board) {
     }
     else {
         if (flip_line(who, dr, dc, r+dr, c+dc, board)) {
-            board[r+dc][c+dc] = who;
+            board[r+dr][c+dc] = who;
             return true;
         }
         else {
