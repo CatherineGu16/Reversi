@@ -11,12 +11,22 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
   <style>
+    body {
+      background-color: rgb(114, 157, 114);
+      padding: 10px 50px 10px;
+    }
     .headerrow {
       background-color: rgb(74, 116, 74);
     }
 
+    #playerList {
+      background-color: rgb(255, 255, 255);
+      padding: 10px;
+    }
+
     #messagePane {
-      background-color: rgb(121, 181, 121);
+      background-color: rgb(74, 116, 74);
+      padding: 10px 10px 15px;
     }
 
     .join_room_response,
@@ -35,7 +45,6 @@
 
 <body>
   <div class="container-fluid">
-    <!---About and Rules buttons-->
     <div class="row m-3 headerrow">
       <div class="col text-center">
         <h3 id="lobbyTitle">Lobby</h3>
@@ -43,16 +52,25 @@
     </div>
 
     <div class="row m-3">
+      <div class="col-md text-end justify-content-end">
+        <div>
+          <br>
+          <a href='index.html' class='btn btn-danger' role='button'>Leave Lobby</a></div>
+      </div>
+    </div>
+  
+    <div class="row m-3">
       <div class="col">
         <!--Enter Username-->
         <div class="row align-items-start justify-content-center">
-          <div class="col-md-4">
+          <div class="col-md-4" id="playerList">
             <h4>Players</h4>
             <div id="players" class="align-items-end text-right m-3">
 
             </div>
           </div>
-          <div class="col-md-8" id="messagePane">
+          <div class="col-md-1"></div>
+          <div class="col-md-7" id="messagePane">
             <div>
               <h4>Messages</h4>
             </div>

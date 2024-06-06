@@ -1,9 +1,14 @@
 body {
-    background-color: rgb(222, 222, 222);
+    background-color: rgb(114, 157, 114);
+    padding: 10px 50px 10px;
+  }
+  .headerrow {
+    background-color: rgb(74, 116, 74);
   }
 
-  .headerrow, #messagePane {
-    background-color: rgb(128, 196, 223);
+  #messagePane {
+    background-color: rgb(74, 116, 74);
+    padding: 10px 10px 15px;
   }
 
   .join_room_response,
@@ -24,7 +29,7 @@ body {
   }
 
   table#game_board td{
-    background-color: white;
+    background-color: rgb(74, 116, 74);
     border:1px solid black;
     margin: 0px;
     padding: 0px;
